@@ -5,7 +5,7 @@
 #include <emscripten.h>
 #endif
 
-
+#include <xsimd/xsimd.hpp>
 
 extern "C" {
 

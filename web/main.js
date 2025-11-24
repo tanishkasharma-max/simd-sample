@@ -67,6 +67,9 @@ applyBtn.addEventListener('click', () => {
   // Copy input pixels → WASM memory
   Module.HEAPU8.set(imageData.data, ptr);
 
+
+  const start = performance.now();
+
   // Call C++ function
   Module.ccall(
     'increase_brightness',
@@ -75,6 +78,8 @@ applyBtn.addEventListener('click', () => {
     [ptr, imgW, imgH, imgW * 4, delta]
   );
 
+   const end = performance.now();
+    console.log(`Brightness processing time: ${(end - start).toFixed(2)} ms`);
   // Copy output back to JS
   const out = new Uint8ClampedArray(Module.HEAPU8.buffer, ptr, bufSize);
   imageData.data.set(out);
