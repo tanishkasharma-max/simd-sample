@@ -4,11 +4,9 @@
 # Build and Run Script for SIMD Brightness
 # =====================================
 
-# Default parameters
 BUILD_DIR="build"
 PORT=8080
 BIND_ADDRESS="0.0.0.0"
-
 
 build_project() {
     echo "=== Creating build directory ==="
@@ -18,27 +16,28 @@ build_project() {
     echo "=== Running CMake configuration with emcmake ==="
     emcmake cmake ..
 
-    echo "=== Building project ==="
+    echo "=== Building WASM project ==="
     cmake --build .
 
     cd ..
-    echo "=== Build complete ==="
+    echo "✓ Build complete at $(date +%H:%M:%S)"
 }
 
 run_server() {
-    echo "=== Starting HTTP server on http://$BIND_ADDRESS:$PORT ==="
-    # Python 3 http server
-    python3 -m http.server "$PORT" --bind "$BIND_ADDRESS"
+    echo "=== Starting HTTP server with hot reload on http://localhost:$PORT ==="
+    browser-sync start --server --files "**/*.js, **/*.html, **/*.wasm, **/*.css, build/**/*" --port "$PORT" --no-notify --no-open
 }
 
 show_usage() {
-    echo "Usage: $0 [build|serve|all]"
-    echo "  build  - Only build WASM project"
-    echo "  serve  - Only run HTTP server"
-    echo "  all    - Build project and then run server"
+    echo "Usage: $0 [build|serve]"
+    echo "  build  - Build WASM project only"
+    echo "  serve  - Run HTTP server with hot reload (watches all files)"
+    echo ""
+    echo "Typical workflow:"
+    echo "  Terminal 1: ./build.sh serve    (keep running)"
+    echo "  Terminal 2: ./build.sh build    (run when you change C++ code)"
 }
 
-# Check argument
 ACTION=$1
 if [[ -z "$ACTION" ]]; then
     show_usage
@@ -50,10 +49,6 @@ case "$ACTION" in
         build_project
         ;;
     serve)
-        run_server
-        ;;
-    all)
-        build_project
         run_server
         ;;
     *)
