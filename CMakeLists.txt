@@ -45,7 +45,7 @@ target_link_options(brightness PRIVATE
     "-sENVIRONMENT=web"
     "-sEXPORT_ES6=1"
     "-sALLOW_MEMORY_GROWTH=1"
-    "-sEXPORTED_FUNCTIONS=[\"_increase_brightness\",\"_malloc\",\"_free\"]"
+    "-sEXPORTED_FUNCTIONS=[\"_malloc\",\"_free\"]"
     "-sEXPORTED_RUNTIME_METHODS=[\"ccall\",\"cwrap\",\"HEAPU8\"]"
 )
 

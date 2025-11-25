@@ -6,12 +6,12 @@
 #endif
 
 #include <xsimd/xsimd.hpp>
+#include <cstdint>
+#include <algorithm>
 
 extern "C" {
 
-#include <xsimd/xsimd.hpp>
-#include <cstdint>
-#include <algorithm>
+
 
 void increase_brightness(uint8_t* data, int width, int height, int stride, uint8_t delta)
 {

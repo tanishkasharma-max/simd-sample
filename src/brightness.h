@@ -1,7 +1,11 @@
-#include <cstdint>
-
+#include <cstdint> 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/emscripten.h>
+#else
+#define EMSCRIPTEN_KEEPALIVE
+#endif
 
 extern "C" {
-// Modify RGBA image in-place. stride = bytes per row (usually width*4)
-void increase_brightness(uint8_t* data, int width, int height, int stride, uint8_t delta);
+    EMSCRIPTEN_KEEPALIVE
+    void increase_brightness(uint8_t* data, int width, int height, int stride, uint8_t delta);
 }
