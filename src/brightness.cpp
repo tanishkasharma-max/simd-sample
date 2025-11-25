@@ -23,7 +23,7 @@ void increase_brightness(uint8_t* data, int width, int height, int stride, uint8
 
     for (int y = 0; y < height; ++y)
     {
-        uint8_t* row = data + y * stride;
+        uint8_t* row = data + y * stride;   // jump to row y
         int totalBytes = width * 4;
         int x = 0;
 
@@ -36,11 +36,12 @@ void increase_brightness(uint8_t* data, int width, int height, int stride, uint8
             alignas(simd_size) uint8_t mask_arr[simd_size];
             for (std::size_t i = 0; i < simd_size; ++i)
                 mask_arr[i] = (i % 4 != 3) ? 0xFF : 0x00;
-
+            
+                //// Aligned load (fast - single instruction)
             batch mask = batch::load_aligned(mask_arr);
 
             // Add delta only to RGB channels and clamp
-            batch result = xsimd::min(pixels + (vdelta & mask), vmax);
+            batch result = xsimd::min(pixels + (vdelta & mask), vmax);   // overflow here
 
             result.store_unaligned(row + x);   // back into memory
         }
